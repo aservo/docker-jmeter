@@ -6,7 +6,7 @@ FROM alpine:3.15.0 as jmeter-base
 
 LABEL maintainer="klehmann@aservo.com"
 
-ARG JMETER_VERSION="5.4.2"
+ARG JMETER_VERSION="5.4.3"
 ENV JMETER_HOME /opt/apache-jmeter-${JMETER_VERSION}
 ENV	JMETER_BIN	${JMETER_HOME}/bin
 ENV JMETER_PLUGINS_FOLDER ${JMETER_HOME}/lib/ext/
