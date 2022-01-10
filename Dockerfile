@@ -44,9 +44,10 @@ FROM jmeter-base
 
 ARG JMETER_PLUGINS_MANAGER_VERSION=1.7
 ARG CMDRUNNER_VERSION=2.2
+ARG PROMETHEUS_LISTERER_VERSION=0.6.0
 
 # install plugins not provided via plugin manager manually
-RUN curl -L --silent https://repo1.maven.org/maven2/com/github/johrstrom/jmeter-prometheus-plugin/0.6.0/jmeter-prometheus-plugin-0.6.0.jar -o ${JMETER_PLUGINS_FOLDER}/jmeter-prometheus-plugin-0.6.0.jar
+RUN curl -L --silent https://repo1.maven.org/maven2/com/github/johrstrom/jmeter-prometheus-plugin/${PROMETHEUS_LISTERER_VERSION}/jmeter-prometheus-plugin-${PROMETHEUS_LISTERER_VERSION}.jar -o ${JMETER_PLUGINS_FOLDER}/jmeter-prometheus-plugin-${PROMETHEUS_LISTERER_VERSION}.jar
 
 # prometheus listener port
 EXPOSE 9270
@@ -58,7 +59,7 @@ RUN cd /tmp/ \
  && java -cp ${JMETER_HOME}/lib/ext/jmeter-plugins-manager-${JMETER_PLUGINS_MANAGER_VERSION}.jar org.jmeterplugins.repository.PluginManagerCMDInstaller \
  && PluginsManagerCMD.sh install \
 jpgc-graphs-basic=2.0 \ 
-jpgc-prmctl=0.4,\
+jpgc-prmctl=0.4 \
 jpgc-dummy=0.4 \
 jpgc-functions=2.1 \
  && jmeter --version \
