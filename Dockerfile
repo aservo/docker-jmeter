@@ -57,11 +57,7 @@ RUN cd /tmp/ \
  && curl --location --silent --show-error --output ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-manager-${JMETER_PLUGINS_MANAGER_VERSION}.jar http://search.maven.org/remotecontent?filepath=kg/apc/jmeter-plugins-manager/${JMETER_PLUGINS_MANAGER_VERSION}/jmeter-plugins-manager-${JMETER_PLUGINS_MANAGER_VERSION}.jar \
  && curl --location --silent --show-error --output ${JMETER_HOME}/lib/cmdrunner-${CMDRUNNER_VERSION}.jar http://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/${CMDRUNNER_VERSION}/cmdrunner-${CMDRUNNER_VERSION}.jar \
  && java -cp ${JMETER_HOME}/lib/ext/jmeter-plugins-manager-${JMETER_PLUGINS_MANAGER_VERSION}.jar org.jmeterplugins.repository.PluginManagerCMDInstaller \
- && PluginsManagerCMD.sh install \
-jpgc-graphs-basic=2.0 \ 
-jpgc-prmctl=0.4 \
-jpgc-dummy=0.4 \
-jpgc-functions=2.1 \
+ && PluginsManagerCMD.sh install jpgc-graphs-basic=2.0,jpgc-prmctl=0.4,jpgc-dummy=0.4,jpgc-functions=2.1 \
  && jmeter --version \
  && PluginsManagerCMD.sh status \
  && chmod +x ${JMETER_HOME}/bin/*.sh \
