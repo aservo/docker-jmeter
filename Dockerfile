@@ -6,7 +6,7 @@ FROM alpine:3.15.0 as jmeter-base
 
 LABEL maintainer="klehmann@aservo.com"
 
-ARG JMETER_VERSION="5.4.3"
+ARG JMETER_VERSION="5.5"
 ENV JMETER_HOME /opt/apache-jmeter-${JMETER_VERSION}
 ENV	JMETER_BIN	${JMETER_HOME}/bin
 ENV JMETER_PLUGINS_FOLDER ${JMETER_HOME}/lib/ext/
@@ -19,7 +19,7 @@ RUN    apk update \
 	&& apk upgrade \
 	&& apk add ca-certificates \
 	&& update-ca-certificates \
-	&& apk add --update openjdk8-jre tzdata curl unzip bash \
+	&& apk add --update openjdk8-jre tzdata curl unzip bash git openssh \
 	&& apk add --no-cache nss \
 	&& rm -rf /var/cache/apk/* \
 	&& mkdir -p /tmp/dependencies  \
@@ -57,7 +57,7 @@ RUN cd /tmp/ \
  && curl --location --silent --show-error --output ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-manager-${JMETER_PLUGINS_MANAGER_VERSION}.jar http://search.maven.org/remotecontent?filepath=kg/apc/jmeter-plugins-manager/${JMETER_PLUGINS_MANAGER_VERSION}/jmeter-plugins-manager-${JMETER_PLUGINS_MANAGER_VERSION}.jar \
  && curl --location --silent --show-error --output ${JMETER_HOME}/lib/cmdrunner-${CMDRUNNER_VERSION}.jar http://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/${CMDRUNNER_VERSION}/cmdrunner-${CMDRUNNER_VERSION}.jar \
  && java -cp ${JMETER_HOME}/lib/ext/jmeter-plugins-manager-${JMETER_PLUGINS_MANAGER_VERSION}.jar org.jmeterplugins.repository.PluginManagerCMDInstaller \
- && PluginsManagerCMD.sh install jpgc-graphs-basic=2.0,jpgc-prmctl=0.4,jpgc-dummy=0.4,jpgc-functions=2.1 \
+ && PluginsManagerCMD.sh install jpgc-graphs-basic=2.0,jpgc-prmctl=0.4,jpgc-dummy=0.4,jpgc-functions=2.1,jpgc-webdriver=3.3 \
  && jmeter --version \
  && PluginsManagerCMD.sh status \
  && chmod +x ${JMETER_HOME}/bin/*.sh \
