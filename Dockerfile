@@ -2,7 +2,7 @@
 # JMeter base layer
 # inspired by https://hub.docker.com/r/justb4/jmeter
 # -----------------------------------------------------------------------
-FROM alpine:3.15.0 as jmeter-base
+FROM alpine:3.17.1 as jmeter-base
 
 LABEL maintainer="klehmann@aservo.com"
 
@@ -42,8 +42,8 @@ WORKDIR	${JMETER_HOME}
 # -----------------------------------------------------------------------
 FROM jmeter-base
 
-ARG JMETER_PLUGINS_MANAGER_VERSION=1.7
-ARG CMDRUNNER_VERSION=2.2
+ARG JMETER_PLUGINS_MANAGER_VERSION=1.8
+ARG CMDRUNNER_VERSION=2.3
 ARG PROMETHEUS_LISTERER_VERSION=0.6.0
 
 # install plugins not provided via plugin manager manually
@@ -57,7 +57,7 @@ RUN cd /tmp/ \
  && curl --location --silent --show-error --output ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-manager-${JMETER_PLUGINS_MANAGER_VERSION}.jar http://search.maven.org/remotecontent?filepath=kg/apc/jmeter-plugins-manager/${JMETER_PLUGINS_MANAGER_VERSION}/jmeter-plugins-manager-${JMETER_PLUGINS_MANAGER_VERSION}.jar \
  && curl --location --silent --show-error --output ${JMETER_HOME}/lib/cmdrunner-${CMDRUNNER_VERSION}.jar http://search.maven.org/remotecontent?filepath=kg/apc/cmdrunner/${CMDRUNNER_VERSION}/cmdrunner-${CMDRUNNER_VERSION}.jar \
  && java -cp ${JMETER_HOME}/lib/ext/jmeter-plugins-manager-${JMETER_PLUGINS_MANAGER_VERSION}.jar org.jmeterplugins.repository.PluginManagerCMDInstaller \
- && PluginsManagerCMD.sh install jpgc-graphs-basic=2.0,jpgc-prmctl=0.4,jpgc-dummy=0.4,jpgc-functions=2.1,jpgc-webdriver=3.3 \
+ && PluginsManagerCMD.sh install jpgc-graphs-basic=2.0,jpgc-prmctl=0.4,jpgc-dummy=0.4,jpgc-functions=2.1,jpgc-webdriver=4.7.2 \
  && jmeter --version \
  && PluginsManagerCMD.sh status \
  && chmod +x ${JMETER_HOME}/bin/*.sh \
