@@ -13,16 +13,17 @@ export JVM_ARGS="-Xmn${n}m -Xms${s}m -Xmx${x}m"
 
 echo "START Running Jmeter on `date`"
 echo "JVM_ARGS=${JVM_ARGS}"
-echo "jmeter args=$@"
+echo "JMeter args=$@"
 
-# Keep entrypoint simple: we must pass the standard JMeter arguments
-jmeter $@
+# Pass JMeter arguments and redirect stdout and err to file for checking whether or not the test was successful
+jmeter $@ 2>&1 | tee jmeter-output
 echo "END Running Jmeter on `date`"
 
-#     -n \
-#    -t "/tests/${TEST_DIR}/${TEST_PLAN}.jmx" \
-#    -l "/tests/${TEST_DIR}/${TEST_PLAN}.jtl"
-# exec tail -f jmeter.log
-#    -D "java.rmi.server.hostname=${IP}" \
-#    -D "client.rmi.localport=${RMI_PORT}" \
-#  -R $REMOTE_HOSTS
+# Evaluate jmeter process output
+if grep -q -E 'Err:.+[1-9]\W\(' jmeter-output
+then
+  echo "RESULT: test failed :-( - return code 1"
+  exit 1
+else
+  echo "RESULT: test suceeded :-) - return code 0"
+fi

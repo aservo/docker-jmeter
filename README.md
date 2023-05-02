@@ -1,7 +1,15 @@
 Docker JMeter
 ==============
 
-A JMeter image including packaged with the JMeter plugins manager plus initialized plugins. In addition, the Prometheus Exporter plugin is included as well.
+A JMeter image packaged with the JMeter plugins manager plus initialized plugins. These are
+- JPGC Dummy Sampler
+- JPGC Basic Graphs
+- JPGC Parameterized Controllers
+- JPGC Functions
+- JPGC Webdriver 
+- Prometheus Listener
+
+> Note: The entrypoint script evaluates the run results and returns 0 for successful runs and 1 if any errors occurred. 
 
 ## Links
 
