@@ -22,11 +22,20 @@ echo "JMeter args=$@"
 jmeter $@ 2>&1 | tee jmeter-output
 echo "END Running Jmeter on `date`"
 
+# Perform XSLT by extracting report path from arg (-JXML_REPORT_PATH)
+if [[ $@ =~ (JXML_REPORT_PATH=)([^-]*) ]]; then
+  # get and trim regex match (see also https://stackoverflow.com/questions/3532718/extract-string-from-string-using-regex-in-the-terminal)
+  reportPath="${BASH_REMATCH[2]/ /}"
+  echo "Processing report xslt from ${reportPath} ..."
+  xsltproc --output "${reportPath/.xml/.html}" jmeter-results2html.xsl "${reportPath}"
+else
+  echo "INFO: No xml report path provided. Consider setting -JXML_REPORT_PATH=[path to jmeter xml report file] in order to utilize the xslt transformation. See also readme.md"
+fi
+
 # Evaluate jmeter process output
-if grep -q -E 'Err:.+[1-9]\W\(' jmeter-output
-then
+if grep -q -E 'Err:.+[1-9]\W\(' jmeter-output; then
   echo "RESULT: test failed :-( - return code 1"
   exit 1
 else
-  echo "RESULT: test suceeded :-) - return code 0"
+  echo "RESULT: test succeeded :-) - return code 0"
 fi
