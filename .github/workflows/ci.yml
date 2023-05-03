@@ -60,7 +60,7 @@ jobs:
       - name: Versions (Tests)
         run: |
           # make sure the jmeter binary can be found and executed
-          docker run --entrypoint="" ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE }}:${{ env.TAG }} jmeter --version
+          docker run ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE }}:${{ env.TAG }} --version
 
       - name: Push
         run: |
