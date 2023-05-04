@@ -19,7 +19,7 @@ RUN    apk update \
 	&& apk upgrade \
 	&& apk add ca-certificates \
 	&& update-ca-certificates \
-	&& apk add --update openjdk8-jre tzdata curl unzip bash git openssh \
+	&& apk add --update openjdk8-jre tzdata curl unzip bash git openssh libxslt \
 	&& apk add --no-cache nss \
 	&& rm -rf /var/cache/apk/* \
 	&& mkdir -p /tmp/dependencies  \
@@ -62,3 +62,6 @@ RUN cd /tmp/ \
  && PluginsManagerCMD.sh status \
  && chmod +x ${JMETER_HOME}/bin/*.sh \
  && rm -fr /tmp/*
+
+# add xsl file for result transformation \
+ADD ./jmeter-results2html.xsl ${JMETER_HOME}
