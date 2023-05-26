@@ -9,7 +9,8 @@ LABEL maintainer="klehmann@aservo.com"
 ARG JMETER_VERSION="5.5"
 ENV JMETER_HOME /opt/apache-jmeter-${JMETER_VERSION}
 ENV	JMETER_BIN	${JMETER_HOME}/bin
-ENV JMETER_PLUGINS_FOLDER ${JMETER_HOME}/lib/ext/
+ENV JMETER_LIBS_FOLDER ${JMETER_HOME}/lib
+ENV JMETER_PLUGINS_FOLDER ${JMETER_LIBS_FOLDER}/ext
 ENV	JMETER_DOWNLOAD_URL  https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
 
 # Install extra packages
@@ -45,9 +46,19 @@ FROM jmeter-base
 ARG JMETER_PLUGINS_MANAGER_VERSION=1.9
 ARG CMDRUNNER_VERSION=2.3
 ARG PROMETHEUS_LISTERER_VERSION=0.6.2
+ARG IVY_VERSION=2.5.1
 
-# install plugins not provided via plugin manager manually
+# -----------------------------------------------------------------------
+# Install additional plugins not provided via plugin manager manually
+# -----------------------------------------------------------------------
+# prometheus plugin for monitoring tasks, see https://github.com/johrstrom/jmeter-prometheus-plugin
 RUN curl -L --silent https://repo1.maven.org/maven2/com/github/johrstrom/jmeter-prometheus-plugin/${PROMETHEUS_LISTERER_VERSION}/jmeter-prometheus-plugin-${PROMETHEUS_LISTERER_VERSION}.jar -o ${JMETER_PLUGINS_FOLDER}/jmeter-prometheus-plugin-${PROMETHEUS_LISTERER_VERSION}.jar
+
+# -----------------------------------------------------------------------
+# Install additional libs
+# -----------------------------------------------------------------------
+# ivy dependency management for calling @Grab dependencies in groovy scripts
+RUN curl -L --silent https://repo1.maven.org/maven2/org/apache/ivy/ivy/${IVY_VERSION}/ivy-${IVY_VERSION}.jar -o ${JMETER_LIBS_FOLDER}/ivy-${IVY_VERSION}.jar
 
 # prometheus listener port
 EXPOSE 9270
