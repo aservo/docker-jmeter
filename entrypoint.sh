@@ -53,6 +53,15 @@ fi
 
 echo ""
 
+# If JMETER_ARGS contain '-o' option, output all files in the directory passed by the '-o' option
+echo "JMeter reports:"
+if [[ ${JMETER_ARGS} == *-o* ]]
+then
+  find $(echo ${JMETER_ARGS} | sed s/.*-o// | cut -d " " -f 2) -type f -exec cat {} \;
+fi
+
+echo ""
+
 # Evaluate JMeter process output
 if grep -q -E 'Err:.+[1-9]\W\(' output.log
 then
@@ -61,3 +70,5 @@ then
 else
   echo "RESULT: test suceeded :-) - return code 0"
 fi
+
+sleep 300
